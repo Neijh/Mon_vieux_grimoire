@@ -5,6 +5,7 @@ const ratingSchema = mongoose.Schema({
   grade: { type: Number, required: true },
 })
 
+// Create a book data model
 const bookSchema = mongoose.Schema({
   userId: { type: String, required: true },
   title: { type: String, required: true },
@@ -16,4 +17,4 @@ const bookSchema = mongoose.Schema({
   averageRating: { type: Number, required: true },
 });
 
-module.exports = mongoose.model('Thing', thingSchema);
+module.exports = mongoose.model('Book', bookSchema);

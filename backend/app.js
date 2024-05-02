@@ -1,7 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose');
 
+// Import routes
 const bookRoutes = require('./routes/books');
+const userRoutes = require('./routes/user');
 
 mongoose.connect('mongodb+srv://grimoire:MvGrimoire59@gaedique.ifdbh1k.mongodb.net/?retryWrites=true&w=majority&appName=Gaedique',
   {
@@ -20,8 +22,10 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(express.json())
+app.use(express.json());
 
-app.use('/api/books', bookRoutes)
+// Register routes
+app.use('/api/books', bookRoutes);
+app.use('/api/auth', userRoutes);
 
-module.exports = app
+module.exports = app;
