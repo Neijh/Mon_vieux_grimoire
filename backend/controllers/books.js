@@ -2,8 +2,6 @@ const Book = require('../models/Book')
 
 // - Authentification not required -
 
-// POST - Register a new user
-// POST - Login a registered user
 // GET - Get all books (Array)
 exports.getBook = (req, res, next) => {
 

@@ -1,21 +1,22 @@
+// Books routing logic
+
 const express = require('express');
+const auth = require('../middleware/auth');
+const bookCtrl = require('../controllers/books');
+
 const router = express.Router();
 
-const bookCtrl = require('../controllers/books');
 
 // - Authentification not required -
 
-// POST - Register a new user
-// POST - Login a registered user
 // GET - Get all books (Array)
-router.get('/', );
+// router.get('/', );
 // GET - Get a single book
 // GET - Get the 3 best ratings books (Array)
 
 // - Authentification required -
 
-// POST - Post a new book
-router.post('/', );
+router.post('/', auth, bookCtrl.createBook); // Post a new book
 
 // PUT - Post a new book
 // DELETE - Delete a book
