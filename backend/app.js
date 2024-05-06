@@ -1,11 +1,13 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const path = require('path');
+require('dotenv').config();
 
 // Import routes
 const bookRoutes = require('./routes/books');
 const userRoutes = require('./routes/user');
 
-mongoose.connect('mongodb+srv://grimoire:MvGrimoire59@gaedique.ifdbh1k.mongodb.net/?retryWrites=true&w=majority&appName=Gaedique',
+mongoose.connect(process.env.DB_URL,
   {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -27,5 +29,6 @@ app.use(express.json());
 // Register routes
 app.use('/api/books', bookRoutes);
 app.use('/api/auth', userRoutes);
+app.use('/images', express.static(path.join(__dirname, 'images'))); // Handle requests to the /image route, by making our images folder static (a subdirectory of our base directory, __dirname)
 
 module.exports = app;
