@@ -10,7 +10,8 @@ const bookCtrl = require('../controllers/books');
 
 // Create
 router.post('/', auth, multer, sharp, bookCtrl.createBook); // Post a new book
-// POST - Rate a book
+router.post('/:id/rating', auth, bookCtrl.rateBook) // Rate a book
+
 // Read
 router.get('/', bookCtrl.getAllBooks); // Get all books (Array)
 router.get('/:id', bookCtrl.getOneBook); // GET - Get a single book

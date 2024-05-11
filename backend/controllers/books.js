@@ -44,7 +44,7 @@ exports.createBook = (req, res, next) => {
   const bookObject = JSON.parse(req.body.book) // The front end should send the request data as form-data and not as JSON
   delete bookObject._id; // Id is generated automatically by the database
   delete bookObject._userId; // Don't trust the user
-  
+
   const imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
   console.log("Image URL:", imageUrl);
 
@@ -105,4 +105,45 @@ exports.deleteBook = (req, res, next) => {
     });
 };
 
-// POST - Rate a book
+// Rate a book **************************************
+exports.rateBook = async (req, res, next) => {
+  console.log("rateBook function called");
+  try {
+    // Define and retrieve userId and rate from the request body
+    const userId = req.body.userId;
+    const grade = req.body.rating;
+    const book = await Book.findOne({ _id: req.params.id }); // Retrieve the object in database
+
+    if (!book) { // Checks if the book exist
+      return res.status(404).json({ message: 'Livre pas trouvé.' });
+    }
+
+    const isAlreadyRated = book.ratings.find(rating => rating.userId === userId);
+    if (isAlreadyRated) { // The book can be rated only once by the user
+      return res.status(401).json({ message: 'Vous ne pouvez attribuer qu\'une note par livre' });
+    }
+
+    if (grade < 0 || grade > 5) { // The rate mut be between 0 and 5
+      return res.status(401).json({ message: 'La note doit être comprise entre 0 et 5.' });
+    }
+
+    book.ratings.push({ userId, grade });
+
+    // Calculate the average score
+    const totalRatings = book.ratings.length;
+    const totalRatingSum = book.ratings.reduce((acc, curr) => acc + curr.grade, 0);
+    book.averageRating = totalRatingSum / totalRatings;
+    book.averageRating = parseFloat(book.averageRating.toFixed(1));
+
+    // Save the book
+    await book.save();
+
+    // Sending the whole object "book" as it is, including all its properties
+    res.status(200).json(book);
+
+  } catch (error) {
+    res.status(500).json({ error: 'Erreur lors de la notation' }); // 500 Server error
+  }
+};
+
+// 
