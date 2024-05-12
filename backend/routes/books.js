@@ -14,8 +14,8 @@ router.post('/:id/rating', auth, bookCtrl.rateBook) // Rate a book
 
 // Read
 router.get('/', bookCtrl.getAllBooks); // Get all books (Array)
+router.get('/bestrating', bookCtrl.bestratingBook)// Get the 3 best ratings books (Array)
 router.get('/:id', bookCtrl.getOneBook); // GET - Get a single book
-// GET - Get the 3 best ratings books (Array)
 // Update
 router.put('/:id', auth, multer, bookCtrl.modifyBook); // Modify a book
 // Delete

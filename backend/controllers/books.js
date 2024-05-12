@@ -146,4 +146,30 @@ exports.rateBook = async (req, res, next) => {
   }
 };
 
-// 
+// Get 3 bestrating books **************************************
+exports.bestratingBook = async (req, res, next) => {
+  try {
+
+    const books = await Book.find();
+
+    // Sorts the array in descending order
+    const sortedBooks = books.sort((a, b) => b.averageRating - a.averageRating);
+
+    // Extract the first 3 books with the highest average ratings
+    const bestBooks = sortedBooks.slice(0, 3);
+        
+    res.status(200).json(bestBooks);
+
+  } catch (error) {
+    res.status(500).json({ error: 'Erreur lors de l\'affichage des trois meilleures notations' })
+  }
+
+};
+
+// exports.bestratingBook = (req, res, next) => {
+//   Book.find()
+//     .sort({ averageRating: -1 })
+//     .limit(3)
+//     .then(bestRatedBook => res.status(200).json(bestRatedBook))
+//     .catch(error => res.status(400).json({ error }));
+// };
