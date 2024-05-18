@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-require('dotenv').config();
+require('dotenv').config(); // Load environment variables from .env file
 
 // Verify that the token is valid and to transmit the information to other middleware or route managers
 module.exports = (req, res, next) => {

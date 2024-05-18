@@ -1,6 +1,6 @@
 // Books routing logic
 const express = require('express');
-const router = express.Router();
+const router = express.Router(); // Save routes in Express router
 const auth = require('../middleware/auth');
 const multer = require('../middleware/multer-config');
 const sharp = require('../middleware/sharp-config');
@@ -16,8 +16,10 @@ router.post('/:id/rating', auth, bookCtrl.rateBook) // Rate a book
 router.get('/', bookCtrl.getAllBooks); // Get all books (Array)
 router.get('/bestrating', bookCtrl.bestratingBook)// Get the 3 best ratings books (Array)
 router.get('/:id', bookCtrl.getOneBook); // GET - Get a single book
+
 // Update
 router.put('/:id', auth, multer, bookCtrl.modifyBook); // Modify a book
+
 // Delete
 router.delete('/:id', auth, bookCtrl.deleteBook); // Delete a book
 
