@@ -132,9 +132,12 @@ exports.modifyBook = (req, res, next) => {
       if (book.userId != req.auth.userId) { // If the user is not the authorized one:
         res.status(401).json({ message: 'Non autorisé' }); // 401 Unauthorized
       } else {
+        const filename = book.imageUrl.split('/images/')[1]; // Retrieved the url and recreated a file path from it
+        fs.unlink(`images/${filename}`, () => { // unlink function to delete this file, passing it the file to update
         Book.updateOne({ _id: req.params.id }, { ...bookObject, _id: req.params.id }) // Update the record, which one/which object
           .then(() => res.status(200).json({ message: 'Objet modifié!' })) // 200 Succès
           .catch(error => res.status(401).json({ error })); // 401 Unauthorized
+        });
       }
     })
     .catch((error) => { // Case 2:

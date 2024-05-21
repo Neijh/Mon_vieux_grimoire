@@ -1,21 +1,27 @@
 const bcrypt = require('bcrypt'); // Encryption package
 const jwt = require('jsonwebtoken'); // Package that create and verify tokens
 const User = require('../models/User');
+const validator = require('email-validator'); // Module to validate an e-mail address
 require('dotenv').config()
 
 // POST - Register a new user
 exports.signup = (req, res, next) => {
-    bcrypt.hash(req.body.password, 10) // Hash the password, salt (execute) 10 times
-        .then(hash => { // 
-            const user = new User({ // Create a user with the mongoose model
-                email: req.body.email,
-                password: hash
-            });
-            user.save() // Register the encrypt password in the database
-                .then(() => res.status(201).json({ message: 'Utilisateur créé !' })) // 201 Resource Creation
-                .catch(error => res.status(400).json({ error })); // 400 Bad Request
-        })
-        .catch(error => res.status(500).json({ error })); // 500 Server Error
+    if (validator.validate(req.body.email)){ // Validate the email format
+        bcrypt.hash(req.body.password, 10) // Hash the password, salt (execute) 10 times
+            .then(hash => { // 
+                const user = new User({ // Create a user with the mongoose model
+                    email: req.body.email,
+                    password: hash
+                });
+                user.save() // Register the encrypt password in the database
+                    .then(() => res.status(201).json({ message: 'Utilisateur créé !' })) // 201 Resource Creation
+                    .catch(error => res.status(400).json({ error })); // 400 Bad Request
+            })
+            .catch(error => res.status(500).json({ error })); // 500 Server Error
+
+    } else {
+        res.status(401).json({ message: "Format de l'email non valide" })
+    }
 };
 
 // POST - Login a registered user
